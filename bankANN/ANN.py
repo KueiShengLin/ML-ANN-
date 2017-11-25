@@ -4,12 +4,12 @@ import tensorflow as tf
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
-f = open('train_nopun.csv', 'r')
+f = open('bank-full.csv', 'r')
 FEATURE = []    # list of the member and it's feature
 ATTRIBUTE = []  # list of the feature
 ATTRIBUTE_ID = []   # cluster id of the each feature
 INPUT_DATA = []     # convert the feature which is str to the cluster id
-CV = 10          # cross validation amount
+CV = 30          # cross validation amount
 
 
 def catch_feature():
@@ -99,7 +99,7 @@ print('catch feature down')
 
 # layer units define
 INPUT = len(INPUT_DATA[0])
-HIDDEN = 200
+HIDDEN = 100
 OUTPUT = 1
 Y_HAT = [ATTRIBUTE_ID[-1][name] for name in ATTRIBUTE[-1]]
 
@@ -109,7 +109,6 @@ input_feed = tf.placeholder(tf.float32, [None, INPUT])
 # layer define you can add more hidden in there
 hidden_layer = add_layer(input_feed, input_tensors=INPUT, output_tensors=HIDDEN, activation_function=tf.nn.sigmoid)
 # hidden_layer2 = add_layer(hidden_layer, input_tensors=HIDDEN, output_tensors=HIDDEN, activation_function=tf.nn.sigmoid)
-# hidden_layer3 = add_layer(hidden_layer2, input_tensors=HIDDEN, output_tensors=HIDDEN, activation_function=tf.nn.sigmoid)
 output_layer = add_layer(hidden_layer, input_tensors=HIDDEN, output_tensors=OUTPUT, activation_function=tf.nn.sigmoid)
 
 loss = tf.losses.mean_squared_error(y_feed, output_layer)   # loss function use mean squared
@@ -121,7 +120,7 @@ init = tf.global_variables_initializer()
 sess = tf.Session()
 sess.run(init)
 
-print('200')
+
 print('training')
 
 cv_list = cross_validation()
